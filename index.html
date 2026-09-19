@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="知识罐罐项目作品集、可交互原型、PDF 与产品 PRD 入口">
+  <title>知识罐罐</title>
+  <style>
+    :root {
+      --paper: #fbf5e8;
+      --card: #fffdf7;
+      --ink: #2f2923;
+      --muted: #756858;
+      --green: #4f6f52;
+      --green-deep: #3d5a40;
+      --yellow: #e6b85c;
+      --brick: #b9553f;
+      --line: #d9c8ad;
+      --shadow: 0 18px 40px rgba(66, 48, 27, .13);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(230,184,92,.18), transparent 30%),
+        radial-gradient(circle at 90% 5%, rgba(79,111,82,.13), transparent 26%),
+        linear-gradient(135deg, #f8efdf 0%, #fbf5e8 55%, #f4ead8 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .32;
+      background-image:
+        linear-gradient(rgba(91,70,45,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91,70,45,.045) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(to bottom, black, transparent 88%);
+    }
+    .wrap { width: min(1120px, calc(100% - 36px)); margin: 0 auto; padding: 54px 0 42px; position: relative; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr .8fr;
+      gap: 28px;
+      align-items: end;
+      padding: 34px;
+      border: 2px solid var(--ink);
+      border-radius: 30px;
+      background: rgba(255,253,247,.92);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      right: -78px;
+      top: -92px;
+      border-radius: 50%;
+      background: rgba(230,184,92,.26);
+      border: 2px solid rgba(47,41,35,.22);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green-deep);
+      font-weight: 800;
+      letter-spacing: .13em;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--yellow); border: 1.5px solid var(--ink); }
+    h1 { margin: 13px 0 12px; font-size: clamp(38px, 6vw, 72px); line-height: .96; letter-spacing: -.05em; }
+    .hero p { margin: 0; max-width: 680px; color: var(--muted); font-size: 17px; line-height: 1.8; }
+    .hero-meta {
+      position: relative;
+      z-index: 1;
+      padding: 20px;
+      border-radius: 22px;
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+    }
+    .hero-meta strong { display: block; font-size: 15px; margin-bottom: 7px; }
+    .hero-meta span { display: block; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .section-head { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin: 44px 4px 18px; }
+    .section-head h2 { margin: 0; font-size: 24px; letter-spacing: -.03em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 13px; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+    .card {
+      grid-column: span 6;
+      min-height: 238px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 25px;
+      border: 2px solid var(--ink);
+      border-radius: 24px;
+      background: var(--card);
+      color: inherit;
+      text-decoration: none;
+      box-shadow: 0 10px 0 rgba(47,41,35,.10);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover { transform: translateY(-5px) rotate(-.25deg); box-shadow: 0 15px 0 rgba(47,41,35,.10), var(--shadow); background: #fffefb; }
+    .card.primary { grid-column: span 7; }
+    .card.side { grid-column: span 5; }
+    .card.green { background: #edf3ea; }
+    .card.yellow { background: #fff4d7; }
+    .card.brick { background: #fae9e2; }
+    .card-top { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .num {
+      width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center;
+      border: 2px solid var(--ink); border-radius: 14px; background: #fff;
+      font-size: 13px; font-weight: 900; box-shadow: 3px 3px 0 rgba(47,41,35,.15);
+    }
+    .tag { padding: 6px 10px; border-radius: 999px; border: 1.5px solid currentColor; font-size: 11px; font-weight: 800; color: var(--green-deep); background: rgba(255,255,255,.55); }
+    .card h3 { margin: 19px 0 9px; font-size: 25px; letter-spacing: -.03em; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.75; max-width: 56ch; }
+    .card-footer { margin-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .open { font-weight: 900; font-size: 14px; color: var(--green-deep); }
+    .arrow { width: 34px; height: 34px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 50%; background: #fff; font-size: 18px; }
+    .note {
+      margin-top: 22px;
+      padding: 19px 22px;
+      border: 1.5px dashed var(--line);
+      border-radius: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      background: rgba(255,253,247,.66);
+    }
+    .note strong { color: var(--ink); }
+    footer { margin-top: 38px; padding-top: 20px; border-top: 1px solid rgba(47,41,35,.13); color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; gap: 20px; }
+    @media (max-width: 820px) {
+      .wrap { padding-top: 24px; }
+      .hero { grid-template-columns: 1fr; padding: 24px; }
+      .card, .card.primary, .card.side { grid-column: span 12; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 8px; }
+      footer { display: block; }
+      footer span { display: block; margin-top: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Product Portfolio · 2026</div>
+        <h1>知识罐罐</h1>
+        <p>从收藏后的内容处理问题出发，展示需求判断、产品架构、核心流程、原型设计与验证目标。</p>
+      </div>
+      <aside class="hero-meta">
+        <strong>王雪霏</strong>
+        <span>优先打开「作品集 PDF」快速了解项目，再进入「可交互原型」体验核心链路。</span>
+      </aside>
+    </section>
+
+    <div class="section-head">
+      <h2>项目材料</h2>
+      <p>点击卡片即可打开对应内容</p>
+    </div>
+
+    <section class="grid">
+      <a class="card primary yellow" href="./知识罐罐-产品经理作品集-v1.0.pdf" target="_blank" rel="noopener">
+        <div>
+          <div class="card-top"><div class="num">01</div><span class="tag">推荐先看</span></div>
+          <h3>作品集 PDF</h3>
+          <p>16 页项目讲解：项目背景、问题定义、产品架构、功能设计、用户流程、原型与最终目标。</p>
+        </div>
+        <div class="card-footer"><span class="open">在线预览</span><span class="arrow">↗</span></div>
+      </a>
+
+      <a class="card side green" href="./知识罐罐-可交互原型-v1.3.html" target="_blank" rel="noopener">
+        <div>
+          <div class="card-top"><div class="num">02</div><span class="tag">体验产品</span></div>
+          <h3>可交互原型</h3>
+          <p>体验投递、解析、知识卡与知识库的完整主链路。建议桌面端或手机浏览器打开。</p>
+        </div>
+        <div class="card-footer"><span class="open">打开原型</span><span class="arrow">↗</span></div>
+      </a>
+
+      <a class="card side brick" href="https://spotty-wall-fc6.notion.site/App-PRD-v1-1-3e0e20e1eac580b0aae8ff03edf89405" target="_blank" rel="noopener">
+        <div>
+          <div class="card-top"><div class="num">03</div><span class="tag">完整方案</span></div>
+          <h3>产品 PRD</h3>
+          <p>查看完整需求、产品结构、功能详述、验收标准、数据埋点与风险决策。</p>
+        </div>
+        <div class="card-footer"><span class="open">查看 PRD</span><span class="arrow">↗</span></div>
+      </a>
+
+      <a class="card primary" href="./知识罐罐-操作视频.html" target="_blank" rel="noopener">
+        <div>
+          <div class="card-top"><div class="num">04</div><span class="tag">小程序实录</span></div>
+          <h3>操作视频</h3>
+          <p>在线查看微信小程序实际操作录屏，了解核心操作路径与真实页面状态。</p>
+        </div>
+        <div class="card-footer"><span class="open">播放视频</span><span class="arrow">▶</span></div>
+      </a>
+    </section>
+
+    <div class="note">
+      <strong>使用建议：</strong>需要快速了解时看 PDF，想看产品完成度时打开可交互原型，需要深挖方案时再进入 PRD。
+    </div>
+
+    <footer>
+      <span>知识罐罐 · App 产品方案</span>
+      <span>作品集 PDF · 可交互原型 · PRD</span>
+    </footer>
+  </main>
+</body>
+</html>
